@@ -11,7 +11,8 @@
     },
     {
       "route": "/admin",
-      "rewrite": "/admin/index.html"
+      "redirect": "/admin/",
+      "statusCode": 301
     }
   ],
   "navigationFallback": {
@@ -33,5 +34,9 @@
     "X-Frame-Options": "DENY",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "mimeTypes": {
+    ".yml": "text/yaml",
+    ".yaml": "text/yaml"
   }
 }
