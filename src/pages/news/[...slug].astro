@@ -12,6 +12,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+const image = post.data.image?.trim();
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
   <div class="page-header">
@@ -25,6 +26,11 @@ const { Content } = await post.render();
   </div>
   <section class="section">
     <div class="container prose">
+      {image && (
+        <p>
+          <img src={image} alt={post.data.title} style="width:100%;max-width:720px;height:auto;border-radius:12px;" />
+        </p>
+      )}
       <Content />
       <p style="margin-top:2rem"><a href="/news">← All news</a></p>
     </div>

@@ -95,14 +95,20 @@ const news = (await getCollection("news", ({ data }) => !data.draft))
         <p>Latest posts from the news collection.</p>
       </div>
       <div class="card-grid">
-        {news.map((n) => (
+        {news.map((n) => {
+          const image = n.data.image?.trim();
+          return (
           <a class="card" href={`/news/${n.slug}`}>
+            {image && (
+              <img src={image} alt="" style="width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;margin-bottom:0.75rem;" />
+            )}
             <span class="card-meta">{n.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
             <h3>{n.data.title}</h3>
             <p>{n.data.description}</p>
             <span class="card-link">Read →</span>
           </a>
-        ))}
+          );
+        })}
       </div>
     </div>
   </section>
