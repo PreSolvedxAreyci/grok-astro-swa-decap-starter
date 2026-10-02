@@ -2,6 +2,11 @@
   "IsEncrypted": false,
   "Values": {
     "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "node"
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "GITHUB_CLIENT_ID": "replace-me",
+    "GITHUB_CLIENT_SECRET": "replace-me",
+    "SITE_URL": "https://grokdemo.juankibin.space",
+    "OAUTH_REDIRECT_URI": "https://grokdemo.juankibin.space/api/callback",
+    "GITHUB_OAUTH_SCOPE": "repo,user"
   }
 }

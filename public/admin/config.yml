@@ -1,11 +1,11 @@
-# Decap CMS — GitHub backend (placeholders; no secrets in repo)
-# One-time setup: GitHub OAuth app + Decap gateway / auth proxy for local & prod.
+# Decap CMS — GitHub backend via in-repo Azure Functions OAuth proxy.
+# Secrets live only in SWA Application settings (GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET).
 backend:
   name: github
   repo: PreSolvedxAreyci/grok-astro-swa-decap-starter
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
+  base_url: https://grokdemo.juankibin.space
+  auth_endpoint: api/auth
 
 local_backend: false
 

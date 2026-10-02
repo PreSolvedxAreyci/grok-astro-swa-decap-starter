@@ -30,7 +30,7 @@ npm run preview
 ## Editors (`/admin`)
 
 1. Open `http://localhost:4321/admin/` (or the deployed `/admin/`).
-2. Sign in with GitHub after **one-time OAuth setup** (GitHub OAuth App + Decap/Netlify auth gateway, or equivalent). Update `public/admin/config.yml` `backend.repo` to `OWNER/REPO`.
+2. Sign in with GitHub after **one-time OAuth setup** (GitHub OAuth App + SWA app settings). See `docs/DECAP-OAUTH.md`. In-repo Functions at `/api/auth` + `/api/callback` replace Netlify's gateway.
 3. Edit News / Products → Save commits Markdown under `src/content/`.
 4. CI rebuilds and deploys.
 
