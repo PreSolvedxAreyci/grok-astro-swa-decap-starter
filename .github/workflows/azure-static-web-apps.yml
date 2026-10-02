@@ -9,6 +9,11 @@ on:
     branches:
       - main
 
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
@@ -20,11 +25,28 @@ jobs:
           submodules: true
           lfs: false
 
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: f85b25a9-7933-4f48-b13e-35dfe44965e3
+          tenant-id: d04957e9-5813-410d-b0fc-e2a80f2f64a6
+          subscription-id: 7bcefa05-a48d-4c80-ae83-19abe1696d00
+
+      - name: Resolve SWA deployment token
+        id: swa
+        run: |
+          TOKEN=$(az staticwebapp secrets list \
+            -n grok-astro-swa-decap \
+            -g rg-website-hosting-sea \
+            --query properties.apiKey -o tsv)
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/"
@@ -36,9 +58,26 @@ jobs:
     runs-on: ubuntu-latest
     name: Close Pull Request
     steps:
+      - name: Azure Login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: f85b25a9-7933-4f48-b13e-35dfe44965e3
+          tenant-id: d04957e9-5813-410d-b0fc-e2a80f2f64a6
+          subscription-id: 7bcefa05-a48d-4c80-ae83-19abe1696d00
+
+      - name: Resolve SWA deployment token
+        id: swa
+        run: |
+          TOKEN=$(az staticwebapp secrets list \
+            -n grok-astro-swa-decap \
+            -g rg-website-hosting-sea \
+            --query properties.apiKey -o tsv)
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+
       - name: Close Pull Request
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          azure_static_web_apps_api_token: ${{ steps.swa.outputs.token }}
           action: "close"
