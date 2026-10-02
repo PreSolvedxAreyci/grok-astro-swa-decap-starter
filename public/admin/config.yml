@@ -2,12 +2,15 @@
 # One-time setup: GitHub OAuth app + Decap gateway / auth proxy for local & prod.
 backend:
   name: github
-  repo: OWNER/REPO
+  repo: PreSolvedxAreyci/grok-astro-swa-decap-starter
   branch: main
   base_url: https://api.netlify.com
   auth_endpoint: auth
 
 local_backend: false
+
+site_url: https://grokdemo.juankibin.space
+display_url: https://grokdemo.juankibin.space
 
 media_folder: public/uploads
 public_folder: /uploads
