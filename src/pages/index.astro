@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const products = (await getCollection("products", ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+const news = (await getCollection("news", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+<BaseLayout title="Grok — AI that is useful for everyone">
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow">Grok | Available on Web, iOS and Android</p>
+      <h1>AI that is useful for everyone.</h1>
+      <p class="hero-lead">
+        Chat, search, reason, and create — all in one place. Answers with what&apos;s
+        happening now and speaks your language.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/products">Try Grok →</a>
+        <a class="btn btn-secondary" href="/contact">Get SuperGrok</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container feature-split">
+      <div>
+        <div class="feature-icon" aria-hidden="true">💬</div>
+        <h2>Chat</h2>
+        <p class="lead">A useful assistant for everyday work — writing, research, and quick recaps.</p>
+        <ul class="checklist">
+          <li>Answers with reasoning you can follow step by step</li>
+          <li>Generates images, video, and code in the same thread</li>
+          <li>Natural voice conversations with low-latency back and forth</li>
+        </ul>
+      </div>
+      <div class="demo-panel" aria-hidden="true">
+        <div class="demo-card">
+          <div class="demo-suggestion"><span class="glyph">⌕</span><span>Plan a 3-day <strong>weekend in Tokyo for first-time visitors</strong></span></div>
+          <div class="demo-suggestion"><span class="glyph">⌕</span><span>Plan a 3-day <strong>weekend in Tokyo focused on art and design</strong></span></div>
+          <div class="demo-suggestion"><span class="glyph">⌕</span><span>Plan a 3-day <strong>weekend in Lisbon with great food and views</strong></span></div>
+          <div class="demo-input"><span>+</span><span>Plan a 3-day…</span><span class="demo-send">↑</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container feature-split">
+      <div>
+        <div class="feature-icon" aria-hidden="true">⌕</div>
+        <h2>Search</h2>
+        <p class="lead">Searches the web live, so answers reflect what&apos;s happening right now — not last year&apos;s training data.</p>
+        <ul class="checklist">
+          <li>Live citations from primary sources across the web</li>
+          <li>Real-time context for breaking news and trends</li>
+          <li>Follow-up questions drill deeper into any topic</li>
+        </ul>
+      </div>
+      <div class="demo-panel" aria-hidden="true">
+        <div class="demo-card">
+          <div class="demo-suggestion"><span class="glyph">⌕</span><span>What is the latest on…</span></div>
+          <div class="demo-input"><span>+</span><span>What is the…</span><span class="demo-send">↑</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Products</h2>
+        <p>Sample CMS-backed product pages. Edit them from /admin.</p>
+      </div>
+      <div class="card-grid">
+        {products.map((p) => (
+          <a class="card" href={`/products/${p.slug}`}>
+            <span class="card-meta">{p.data.category}</span>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.description}</p>
+            <span class="card-link">Learn more →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-head">
+        <h2>News</h2>
+        <p>Latest posts from the news collection.</p>
+      </div>
+      <div class="card-grid">
+        {news.map((n) => (
+          <a class="card" href={`/news/${n.slug}`}>
+            <span class="card-meta">{n.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
+            <h3>{n.data.title}</h3>
+            <p>{n.data.description}</p>
+            <span class="card-link">Read →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

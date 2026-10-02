@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const products = await getCollection("products", ({ data }) => !data.draft);
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { product },
+  }));
+}
+
+const { product } = Astro.props;
+const { Content } = await product.render();
+---
+<BaseLayout title={product.data.title} description={product.data.description}>
+  <div class="page-header">
+    <div class="container prose">
+      <p class="meta">{product.data.category}{product.data.sku ? ` · ${product.data.sku}` : ""}</p>
+      <h1>{product.data.title}</h1>
+      <p>{product.data.description}</p>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container prose">
+      <Content />
+      <p style="margin-top:2rem"><a href="/products">← All products</a></p>
+    </div>
+  </section>
+</BaseLayout>

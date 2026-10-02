@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("news", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout title="News" description="Grok demo news and updates.">
+  <div class="page-header">
+    <div class="container">
+      <h1>News</h1>
+      <p>Updates from the demo site. Editors publish via Decap CMS at /admin.</p>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container card-grid">
+      {posts.map((n) => (
+        <a class="card" href={`/news/${n.slug}`}>
+          <span class="card-meta">{n.data.pubDate.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })} · {n.data.author}</span>
+          <h3>{n.data.title}</h3>
+          <p>{n.data.description}</p>
+          <span class="card-link">Read →</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

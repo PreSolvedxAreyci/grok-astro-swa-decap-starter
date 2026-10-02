@@ -1,0 +1,31 @@
+---
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/products", label: "Products" },
+  { href: "/news", label: "News" },
+  { href: "/contact", label: "Contact" },
+];
+function isCurrent(href: string) {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+---
+<div class="demo-banner">Demo lookalike — not an official SpaceXAI site. CMS at /admin</div>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="/" aria-label="Grok demo home">
+      <span class="logo-mark" aria-hidden="true"></span>
+      <span>Grok</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      {links.map((link) => (
+        <a href={link.href} aria-current={isCurrent(link.href) ? "page" : undefined}>{link.label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <a class="btn btn-secondary btn-sm" href="/contact">Contact Sales</a>
+      <a class="btn btn-primary btn-sm" href="/products">Try for free</a>
+    </div>
+  </div>
+</header>

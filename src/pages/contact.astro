@@ -1,0 +1,78 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Contact" description="Contact the Grok demo site.">
+  <div class="page-header">
+    <div class="container">
+      <h1>Contact</h1>
+      <p>Simple contact form UI. Posts to /api/contact (stub on Azure SWA).</p>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div id="form-status" class="form-status" role="status" aria-live="polite" hidden></div>
+      <form id="contact-form" class="contact-form" action="/api/contact" method="post" novalidate>
+        <div class="hp-field" inert aria-hidden="true">
+          <label for="website">Website</label>
+          <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" autocomplete="name" required maxlength="120" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" autocomplete="email" required maxlength="254" />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required maxlength="5000" minlength="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contact-submit">Send message</button>
+        <p class="form-hint">Demo stub — wire Resend or another provider later. No secrets in this repo.</p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+<script>
+  const form = document.getElementById("contact-form") as HTMLFormElement | null;
+  const statusEl = document.getElementById("form-status");
+  const submitBtn = document.getElementById("contact-submit") as HTMLButtonElement | null;
+
+  function showStatus(type: "success" | "error", message: string) {
+    if (!statusEl) return;
+    statusEl.hidden = false;
+    statusEl.className = `form-status form-status--${type}`;
+    statusEl.textContent = message;
+  }
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!form) return;
+    const data = new FormData(form);
+    if ((data.get("website") as string)?.trim()) {
+      showStatus("success", "Thanks — message received.");
+      form.reset();
+      return;
+    }
+    submitBtn && (submitBtn.disabled = true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: data.get("name"),
+          email: data.get("email"),
+          message: data.get("message"),
+        }),
+      });
+      if (!res.ok) throw new Error("bad status");
+      showStatus("success", "Thanks — message received.");
+      form.reset();
+    } catch {
+      showStatus("error", "Could not send right now. The API stub may be offline in local preview.");
+    } finally {
+      submitBtn && (submitBtn.disabled = false);
+    }
+  });
+</script>

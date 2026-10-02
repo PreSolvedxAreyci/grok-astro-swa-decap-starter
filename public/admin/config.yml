@@ -1,0 +1,48 @@
+# Decap CMS — GitHub backend (placeholders; no secrets in repo)
+# One-time setup: GitHub OAuth app + Decap gateway / auth proxy for local & prod.
+backend:
+  name: github
+  repo: OWNER/REPO
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+local_backend: false
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: news
+    label: News
+    folder: src/content/news
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: Publish Date, name: pubDate, widget: datetime }
+      - { label: Author, name: author, widget: string, default: "xAI" }
+      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Image, name: image, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
+
+  - name: products
+    label: Products
+    folder: src/content/products
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: SKU, name: sku, widget: string, required: false }
+      - { label: Category, name: category, widget: string, default: "AI" }
+      - { label: Featured, name: featured, widget: boolean, default: false }
+      - { label: Draft, name: draft, widget: boolean, default: false }
+      - { label: Image, name: image, widget: image, required: false }
+      - { label: Order, name: order, widget: number, default: 99 }
+      - { label: Body, name: body, widget: markdown }

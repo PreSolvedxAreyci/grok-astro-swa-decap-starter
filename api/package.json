@@ -1,0 +1,12 @@
+{
+  "name": "grok-demo-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/functions/*.js",
+  "dependencies": {
+    "@azure/functions": "^4.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
